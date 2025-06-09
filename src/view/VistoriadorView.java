@@ -17,7 +17,7 @@ public class VistoriadorView extends JFrame {
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        JLabel lblBemVindo = new JLabel("Bem-vindo, Vistoriador " + user, JLabel.CENTER);
+        JLabel lblBemVindo = new JLabel("Bem-vinda, Vistoriadora " + user, JLabel.CENTER);
         lblBemVindo.setFont(new Font("Comic Sans", Font.BOLD, 18));
         mainPanel.add(lblBemVindo, BorderLayout.CENTER);
 
