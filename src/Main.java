@@ -1,3 +1,4 @@
+import view.VistoriadorView;
 import controller.SolicitacaoController;
 import repository.SolicitacaoRepositoryMemoria;
 import view.ProprietarioView;
@@ -14,17 +15,17 @@ public class Main {
             ex.printStackTrace();
         }
 
-        /* Roda a primeira tela ProprietarioView */
+        /* Roda a primeira tela ProprietarioView
         SolicitacaoController controller = new SolicitacaoController(new SolicitacaoRepositoryMemoria());
         ProprietarioView tela = new ProprietarioView(controller);
-        tela.setVisible(true);
+        tela.setVisible(true);*/
 
-        /* Roda a primeira tela VistoriadorView
+        /* Roda a primeira tela VistoriadorView*/
         SwingUtilities.invokeLater(() -> {
             VistoriadorView vistoriadorView = new VistoriadorView("Júlia");
             vistoriadorView.setVisible(true);
         });
-         */
+
     }
 }
 
