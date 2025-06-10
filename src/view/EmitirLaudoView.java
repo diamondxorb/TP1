@@ -7,6 +7,8 @@ import java.util.Date;
 import model.Agendamento;
 import model.Laudo;
 import model.Vistoriador;
+import model.Proprietario;
+import model.Veiculo;
 
 public class EmitirLaudoView extends JFrame {
     private final Agendamento agendamento;
@@ -97,10 +99,13 @@ public class EmitirLaudoView extends JFrame {
             return;
         }
 
+        Veiculo veiculo = agendamento.getVeiculo();
+        Proprietario proprietario = veiculo.getProprietario();
+
         // Associa o laudo ao agendamento
-        Laudo laudo = new Laudo(status, motivo, new Date(), vistoriador);
-        agendamento.setLaudo(laudo);
-        agendamento.setStatus("Concluído");
+        Laudo laudo = new Laudo(status, motivo, new Date(), vistoriador,
+                agendamento.getVeiculo().getProprietario(),
+                agendamento.getVeiculo()); // Veículo do agendamento
 
         JOptionPane.showMessageDialog(this,
                 "Laudo emitido com sucesso!",

@@ -3,19 +3,26 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import controller.AgendamentoController;
 import model.Agendamento;
+import model.Proprietario;
 import model.Vistoriador;
+import model.Veiculo;
 
 public class VistoriadorAgendamentosView extends JFrame {
     private JTable tabelaAgendamentos;
     private JButton btnVisualizar, btnLaudo;
     private Vistoriador vistoriador;
-    private List<Agendamento> agendamentosDoDia;
+    private List<Agendamento> agendamentosDoDia = new ArrayList<>();
+    private final AgendamentoController agendamentoController;
 
-    public VistoriadorAgendamentosView(Vistoriador vistoriador) {
+    public VistoriadorAgendamentosView(Vistoriador vistoriador, AgendamentoController controller) {
+        this.agendamentoController = controller;
         this.vistoriador = vistoriador;
         setTitle("Agendamentos do Dia - " + vistoriador.getNome());
         setSize(900, 600);
@@ -54,32 +61,37 @@ public class VistoriadorAgendamentosView extends JFrame {
     }
 
     private void carregarAgendamentosDoDia() {
-        // Apenas para mostrar na tela, será feito um banco de dados
-        agendamentosDoDia = new ArrayList<>();
-        agendamentosDoDia.add(new Agendamento(1, new Date(), "Cliente 1", "Local 1", "Pendente"));
-        agendamentosDoDia.add(new Agendamento(2, new Date(), "Cliente 2", "Local 2", "Pendente"));
-        agendamentosDoDia.add(new Agendamento(3, new Date(), "Cliente 3", "Local 3", "Pendente"));
-        agendamentosDoDia.add(new Agendamento(4, new Date(), "Cliente 4", "Local 4", "Pendente"));
-        agendamentosDoDia.add(new Agendamento(5, new Date(), "Cliente 5", "Local 5", "Pendente"));
-        
+        agendamentosDoDia.clear();
+
+        agendamentosDoDia = agendamentoController.listarAgendamentosDoDia(new Date());
         atualizarTabela();
     }
 
     private void atualizarTabela() {
-        Object[][] dados = new Object[agendamentosDoDia.size()][5];
+        String[] colunas = {"ID", "Data/Hora", "Cliente", "Local", "Modelo", "Placa", "Status"};
+        Object[][] dados = new Object[agendamentosDoDia.size()][7];
 
-        for (int i=0; i<agendamentosDoDia.size(); i++) {
+        for (int i = 0; i < agendamentosDoDia.size(); i++) {
             Agendamento agen = agendamentosDoDia.get(i);
+            Veiculo veiculo = agen.getVeiculo();
+
             dados[i][0] = agen.getId();
             dados[i][1] = agen.getDataHoraFormatada();
             dados[i][2] = agen.getCliente();
             dados[i][3] = agen.getLocal();
-            dados[i][4] = agen.getStatus();
+            dados[i][4] = veiculo.getModelo();
+            dados[i][5] = veiculo.getPlaca();
+            dados[i][6] = agen.getStatus();
         }
 
-        tabelaAgendamentos.setModel(new javax.swing.table.DefaultTableModel(dados,
-                new String[] {"ID", "Data/Hora", "Cliente", "Local", "Status"}
-        ));
+        tabelaAgendamentos.setModel(new javax.swing.table.DefaultTableModel(
+                dados, colunas
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Torna a tabela não editável
+            }
+        });
     }
 
     private void visualizarDetalhes(ActionEvent e) {
@@ -93,7 +105,7 @@ public class VistoriadorAgendamentosView extends JFrame {
         }
 
         int agendamentoId = (int) tabelaAgendamentos.getValueAt(selectedRow, 0);
-        Agendamento agendamento = buscarAgendamentoPorId(agendamentoId);
+        Agendamento agendamento = agendamentoController.buscarPorId(agendamentoId);
 
         new DetalhesAgendamentoView(agendamento).setVisible(true);
     }

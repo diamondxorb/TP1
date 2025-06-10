@@ -4,13 +4,19 @@ public class SolicitacaoAgendamento {
     private String local;
     private String status; // "Pendente", "Aceito", "Negado"
     private String motivoNegacao;
+    private String motivo;
+    private Veiculo veiculo;
 
-    public SolicitacaoAgendamento(String local) {
+    public SolicitacaoAgendamento(String local, Veiculo veiculo, String motivo) {
         this.local = local;
+        this.veiculo = veiculo;
+        this.motivo = motivo;
         this.status = "Pendente";
     }
 
     public String getLocal() {return local;}
+    public Veiculo getVeiculo() {return veiculo;}
+    public String getMotivo() {return motivo;}
     public String getStatus() {return status;}
     public String getMotivoNegacao() {return motivoNegacao;}
 

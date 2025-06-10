@@ -20,10 +20,4 @@ public class Vistoriador extends Pessoa {
     //Setters
     public void setCadastroDetran(String cadastroDetran) {this.cadastroDetran = cadastroDetran;}
     public void setSenha(String senha) {this.senha = senha;}
-
-    /*IMPLEMENTAR
-    public void criaLaudo(Laudo laudo) {
-        ;
-    }
-     */
 }

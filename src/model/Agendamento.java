@@ -8,27 +8,20 @@ public class Agendamento {
     private String cliente;
     private String local;
     private String status;
-    private Laudo laudo;
+    private Veiculo veiculo;
 
     //Construtor
-    public Agendamento(int id, Date dataHora, String cliente, String local, String status) {
+    public Agendamento(int id, Date dataHora, String cliente, String local, String status, Veiculo veiculo) {
         this.id = id;
         this.dataHora = dataHora;
         this.cliente = cliente;
         this.local = local;
         this.status = status;
+        this.veiculo = veiculo;
     }
 
     public String getDataHoraFormatada() {
         return new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataHora);
-    }
-
-    public Laudo getLaudo() {return laudo;}
-    public void setLaudo(Laudo laudo) {
-        this.laudo = laudo;
-        if(laudo != null) {
-            this.status = "Concluído";
-        }
     }
 
     //Getters
@@ -37,6 +30,7 @@ public class Agendamento {
     public String getCliente() {return cliente;}
     public String getLocal() {return local;}
     public String getStatus() {return status;}
+    public Veiculo getVeiculo() {return veiculo;}
 
     //Setters
     public void setDataHora(Date dataHora) {this.dataHora = dataHora;}

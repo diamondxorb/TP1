@@ -1,7 +1,12 @@
 package view;
 
 import java.time.LocalDate;
+
+import controller.AgendamentoController;
 import model.Vistoriador;
+import repository.AgendamentoRepository;
+import repository.AgendamentoRepositoryMemoria;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -25,7 +30,12 @@ public class VistoriadorView extends JFrame {
 
         JButton btnAgendamentos = new JButton("Meus Agendamentos");
         btnAgendamentos.addActionListener(e -> {
-            new VistoriadorAgendamentosView(vistoriador).setVisible(true);
+            // Crie o controller e repositório necessários
+            AgendamentoRepository repository = new AgendamentoRepositoryMemoria();
+            AgendamentoController agendamentoController = new AgendamentoController(repository);
+
+            // Passe ambos os argumentos
+            new VistoriadorAgendamentosView(vistoriador, agendamentoController).setVisible(true);
         });
 
         buttonPanel.add(btnAgendamentos);

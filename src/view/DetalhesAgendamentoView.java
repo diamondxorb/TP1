@@ -27,19 +27,6 @@ public class DetalhesAgendamentoView extends JFrame {
 
         panel.add(new JLabel("Status:"));
         panel.add(new JLabel(agendamento.getStatus()));
-
-        if (agendamento.getLaudo() != null) {
-            panel.add(new JLabel("Laudo:"));
-            panel.add(new JLabel(agendamento.getLaudo().getStatus()));
-
-            panel.add(new JLabel("Motivo:"));
-            panel.add(new JLabel(agendamento.getLaudo().getMotivo()));
-
-            panel.add(new JLabel("Emissão do Laudo:"));
-            panel.add(new JLabel(agendamento.getLaudo().getDataEmissaoFormatada()));
-        }
-
         add(panel);
     }
-
 }
