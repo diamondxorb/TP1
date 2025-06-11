@@ -98,7 +98,7 @@ public class EmitirLaudoView extends JFrame {
         }
 
         // Associa o laudo ao agendamento
-        Laudo laudo = new Laudo(status, motivo, new Date(), vistoriador);
+        Laudo laudo = new Laudo(status, motivo, new Date(), vistoriador, null, null);
         agendamento.setLaudo(laudo);
         agendamento.setStatus("Concluído");
 
