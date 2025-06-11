@@ -1,7 +1,6 @@
 package repository;
 
 import model.SolicitacaoAgendamento;
-
 import java.util.ArrayList;
 import java.util.List;
 

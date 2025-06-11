@@ -1,7 +1,6 @@
 package repository;
 
 import model.SolicitacaoAgendamento;
-
 import java.util.List;
 
 public interface SolicitacaoRepository {
