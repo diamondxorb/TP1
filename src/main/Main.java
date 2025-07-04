@@ -12,11 +12,11 @@ public class Main {
             e.printStackTrace();
         }
         Conexao.inicializarBanco();
+        System.out.println("Banco ok");
 
 
 
-        Conexao.inicializarTabelaAgendamento();
-        Conexao.atualizarBanco();
+
         new view.TelaPrincipal();
 
     }

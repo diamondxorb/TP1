@@ -5,61 +5,55 @@ import model.Atendente;
 import util.HashUtil;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class TelaCadastroAtendente extends JFrame {
 
+    private JTextField txtNome, txtCpf, txtNascimento, txtEndereco, txtEmail, txtCelular, txtNumeroId;
+    private JPasswordField txtSenha;
+    private JButton btnSalvar;
+
     public TelaCadastroAtendente() {
         setTitle("Cadastro de Atendente");
-        setSize(500, 450);
+        setSize(500, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        initUI();
-        setVisible(true);
-    }
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(new Color(240, 240, 240));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        add(mainPanel);
 
-    private void initUI() {
-        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JTextField txtNome = new JTextField();
-        JTextField txtCpf = new JTextField();
-        JTextField txtNascimento = new JTextField();
-        JTextField txtEndereco = new JTextField();
-        JTextField txtEmail = new JTextField();
-        JTextField txtCelular = new JTextField();
-        JTextField txtNumeroId = new JTextField();
-        JPasswordField txtSenha = new JPasswordField();
+        String[] labels = {"Nome:", "CPF:", "Nascimento (YYYY-MM-DD):", "Endereço:", "E-mail:", "Celular:", "Número Identificação:", "Senha:"};
+        JTextField[] fields = new JTextField[labels.length];
+        txtNome = new JTextField(); txtCpf = new JTextField(); txtNascimento = new JTextField();
+        txtEndereco = new JTextField(); txtEmail = new JTextField(); txtCelular = new JTextField();
+        txtNumeroId = new JTextField(); txtSenha = new JPasswordField();
+        fields[0]=txtNome; fields[1]=txtCpf; fields[2]=txtNascimento; fields[3]=txtEndereco;
+        fields[4]=txtEmail; fields[5]=txtCelular; fields[6]=txtNumeroId;
 
-        panel.add(new JLabel("Nome:"));
-        panel.add(txtNome);
-        panel.add(new JLabel("CPF:"));
-        panel.add(txtCpf);
-        panel.add(new JLabel("Nascimento (YYYY-MM-DD):"));
-        panel.add(txtNascimento);
-        panel.add(new JLabel("Endereço:"));
-        panel.add(txtEndereco);
-        panel.add(new JLabel("E-mail:"));
-        panel.add(txtEmail);
-        panel.add(new JLabel("Celular:"));
-        panel.add(txtCelular);
-        panel.add(new JLabel("Número de Identificação:"));
-        panel.add(txtNumeroId);
-        panel.add(new JLabel("Senha:"));
-        panel.add(txtSenha);
+        gbc.gridx = 0; gbc.gridy = 0;
+        for (int i = 0; i < labels.length; i++) {
+            mainPanel.add(new JLabel(labels[i]), gbc);
+            gbc.gridx = 1;
+            mainPanel.add(i < 7 ? fields[i] : txtSenha, gbc);
+            gbc.gridx = 0; gbc.gridy++;
+        }
 
-        JButton btnSalvar = new JButton("Salvar Atendente");
+        btnSalvar = new JButton("Salvar");
+        btnSalvar.setBackground(new Color(255, 204, 0));
+        gbc.gridx = 0; gbc.gridwidth = 2; gbc.anchor = GridBagConstraints.CENTER;
+        mainPanel.add(btnSalvar, gbc);
+
         btnSalvar.addActionListener(e -> {
             try {
-                if (txtNome.getText().isBlank() || txtCpf.getText().length() != 11 || txtNumeroId.getText().isBlank()) {
-                    JOptionPane.showMessageDialog(this, "Preencha nome, CPF (11 dígitos) e número de identificação.", "Atenção", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
                 int numeroId = Integer.parseInt(txtNumeroId.getText());
                 String senhaHash = HashUtil.sha256(new String(txtSenha.getPassword()));
-
                 Atendente a = new Atendente(
                         txtNome.getText(), txtCpf.getText(), txtNascimento.getText(),
                         txtEndereco.getText(), txtEmail.getText(), txtCelular.getText(),
@@ -67,18 +61,12 @@ public class TelaCadastroAtendente extends JFrame {
                 );
                 PessoaController.salvarAtendente(a);
                 JOptionPane.showMessageDialog(this, "Atendente salvo com sucesso!");
-                this.dispose();
-
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Número de identificação inválido", "Erro", JOptionPane.ERROR_MESSAGE);
+                dispose();
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
             }
         });
 
-        panel.add(new JLabel(""));
-        panel.add(btnSalvar);
-
-        add(panel);
+        setVisible(true);
     }
 }
