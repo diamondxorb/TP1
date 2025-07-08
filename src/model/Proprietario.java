@@ -1,24 +1,32 @@
 package model;
 
-import java.time.LocalDate;
-
 public class Proprietario extends Pessoa {
-    private String cadastroDetran;
     private String senha;
+    private int documentoVeiculo;
+    private boolean isPago;
 
-    //Construtor
-    public Proprietario(String nome, String cpf, LocalDate dataDeNascimento, String endereco, String email, String celular, String cadastroDetran, String senha) {
-        super(nome, cpf, dataDeNascimento, endereco, email, celular);
-        this.cadastroDetran = cadastroDetran;
+
+    public Proprietario(int id,String nome, String cpf, String dataDeNascimento, String endereco, String email, String celular, String senha) {
+        super(id ,nome, cpf, dataDeNascimento, endereco, email, celular);
         this.senha = senha;
     }
 
-    //Getters
-    public String getCadastroDetran() {return cadastroDetran;}
-    public String getSenha() {return senha;}
 
-    //Setters
-    public void setCadastroDetran(String cadastroDetran) {this.cadastroDetran = cadastroDetran;}
-    public void setSenha(String senha) {this.senha = senha;}
+    public Proprietario(String nome, String cpf, String dataDeNascimento, String endereco, String email, String celular, String senha) {
+        super(nome, cpf, dataDeNascimento, endereco, email, celular);
+        this.senha = senha;
+    }
+    public Proprietario(){
+        super();
+    }
+
+    //Getters
+    public String getSenha() {return senha;}
+    public int getDocumentoVeiculo() {return documentoVeiculo;}
+    public boolean isPago() {return isPago;}
+
+
+
+
 
 }

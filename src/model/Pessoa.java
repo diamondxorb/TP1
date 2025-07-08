@@ -1,38 +1,81 @@
 package model;
 
-import java.time.LocalDate;
-
-public class Pessoa {
+public abstract class Pessoa {
+    private int id;
     private String nome;
     private String cpf;
-    private LocalDate dataDeNascimento;
+    private String dataNascimento;
     private String endereco;
     private String email;
     private String celular;
 
-    //Construtor
-    public Pessoa(String nome, String cpf, LocalDate dataDeNascimento, String endereco, String email, String celular) {
+    // Construtor com ID (para listar, editar)
+    public Pessoa(int id, String nome, String cpf, String dataNascimento,
+                  String endereco, String email, String celular) {
+        this.id = id;
         this.nome = nome;
         this.cpf = cpf;
-        this.dataDeNascimento = dataDeNascimento;
+        this.dataNascimento = dataNascimento;
         this.endereco = endereco;
         this.email = email;
         this.celular = celular;
     }
 
-    //Getters
-    public String getNome() {return nome;}
-    public String getCpf() {return cpf;}
-    public LocalDate getDataDeNascimento() {return dataDeNascimento;}
-    public String getEndereco() {return endereco;}
-    public String getEmail() {return email;}
-    public String getCelular() {return celular;}
+    // Construtor sem ID (para cadastro)
+    public Pessoa(String nome, String cpf, String dataNascimento,
+                  String endereco, String email, String celular) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.endereco = endereco;
+        this.email = email;
+        this.celular = celular;
+    }
 
-    //Setters
-    public void setNome(String nome) {this.nome = nome;}
-    public void setCpf(String cpf) {this.cpf = cpf;}
-    public void setDataDeNascimento(LocalDate dataDeNascimento) {this.dataDeNascimento = dataDeNascimento;}
-    public void setEndereco(String endereco) {this.endereco = endereco;}
-    public void setEmail(String email) {this.email = email;}
-    public void setCelular(String celular) {this.celular = celular;}
+    // Construtor vazio (útil para edição)
+    public Pessoa() {}
+
+    // Getters e Setters
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public String getCpf() {
+        return cpf;
+    }
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+    public String getDataNascimento() {
+        return dataNascimento;
+    }
+    public void setDataNascimento(String dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+    public String getEndereco() {
+        return endereco;
+    }
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getCelular() {
+        return celular;
+    }
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
 }

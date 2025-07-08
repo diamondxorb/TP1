@@ -1,46 +1,67 @@
 package model;
 
-import java.util.Date;
-
 public class Agendamento {
     private int id;
-    private Date dataHora;
-    private String cliente;
-    private String local;
-    private String status;
+    private String data;
+    private String horario;
+    private String motivoAgendamento;
+    private Atendente atendente;
+    private Vistoriador vistoriador;
+    private Veiculo veiculo;
+
     private Laudo laudo;
+    private String status;
 
-    //Construtor
-    public Agendamento(int id, Date dataHora, String cliente, String local, String status) {
+    // Construtor padrão vazio
+    public Agendamento() {
+    }
+
+    // Construtor para SELECT com ID
+    public Agendamento(int id, String data, String horario, String motivoAgendamento,
+                       Atendente atendente, Vistoriador vistoriador) {
         this.id = id;
-        this.dataHora = dataHora;
-        this.cliente = cliente;
-        this.local = local;
-        this.status = status;
+        this.data = data;
+        this.horario = horario;
+        this.motivoAgendamento = motivoAgendamento;
+        this.atendente = atendente;
+        this.vistoriador = vistoriador;
     }
 
-    public String getDataHoraFormatada() {
-        return new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataHora);
+    // Construtor para INSERT sem ID
+    public Agendamento(String data, String horario, String motivoAgendamento,
+                       Atendente atendente, Vistoriador vistoriador) {
+        this.data = data;
+        this.horario = horario;
+        this.motivoAgendamento = motivoAgendamento;
+        this.atendente = atendente;
+        this.vistoriador = vistoriador;
     }
 
-    public Laudo getLaudo() {return laudo;}
-    public void setLaudo(Laudo laudo) {
-        this.laudo = laudo;
-        if(laudo != null) {
-            this.status = "Concluído";
-        }
-    }
+    // Getters e Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    //Getters
-    public int getId() {return id;}
-    public Date getDataHora() {return dataHora;}
-    public String getCliente() {return cliente;}
-    public String getLocal() {return local;}
-    public String getStatus() {return status;}
+    public String getData() { return data; }
+    public void setData(String data) { this.data = data; }
 
-    //Setters
-    public void setDataHora(Date dataHora) {this.dataHora = dataHora;}
-    public void setCliente(String cliente) {this.cliente = cliente;}
-    public void setLocal(String local) {this.local = local;}
-    public void setStatus(String status) {this.status = status;}
+    public String getHorario() { return horario; }
+    public void setHorario(String horario) { this.horario = horario; }
+
+    public String getMotivoAgendamento() { return motivoAgendamento; }
+    public void setMotivoAgendamento(String motivoAgendamento) { this.motivoAgendamento = motivoAgendamento; }
+
+    public Atendente getAtendente() { return atendente; }
+    public void setAtendente(Atendente atendente) { this.atendente = atendente; }
+
+    public Vistoriador getVistoriador() { return vistoriador; }
+    public void setVistoriador(Vistoriador vistoriador) { this.vistoriador = vistoriador; }
+
+    public Laudo getLaudo() { return laudo; }
+    public void setLaudo(Laudo laudo) { this.laudo = laudo; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public Veiculo getVeiculo() { return veiculo; }
+    public void setVeiculo(Veiculo veiculo) { this.veiculo = veiculo; }
 }

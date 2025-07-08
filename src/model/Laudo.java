@@ -3,22 +3,32 @@ package model;
 import java.util.Date;
 
 public class Laudo {
+    int id;
     private String status;
     private String motivo;
     private Date dataEmissao;
     private Vistoriador vistoriador;
-    private Proprietario proprietario;
+    private Agendamento agendamento;
     private Veiculo veiculo;
 
+    // Construtor padrão
+    public Laudo() {
+    }
+
     //Construtor
-    public Laudo(String status, String motivo, Date dataEmissao, Vistoriador vistoriador, Proprietario proprietario, Veiculo veiculo) {
+    public Laudo(int id, String status, String motivo, Date dataEmissao, Vistoriador vistoriador) {
+        this.id = id;
         this.status = status;
         this.motivo = motivo;
         this.dataEmissao = dataEmissao;
         this.vistoriador = vistoriador;
+    }
 
-        this.proprietario = proprietario;
-        this.veiculo = veiculo;
+    public Laudo(String status, String motivo, Date dataEmissao, Vistoriador vistoriador) {
+        this.status = status;
+        this.motivo = motivo;
+        this.dataEmissao = dataEmissao;
+        this.vistoriador = vistoriador;
     }
 
     public String getDataEmissaoFormatada() {
@@ -26,25 +36,27 @@ public class Laudo {
     }
 
     //Getters
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
     public String getStatus() {return status;}
     public String getMotivo() {return motivo;}
     public Vistoriador getVistoriador() {return vistoriador;}
-
-    public Proprietario getProprietario() {return proprietario;}
+    public Date getDataEmissao() {return dataEmissao;}
+    public Agendamento getAgendamento() {return agendamento;}
     public Veiculo getVeiculo() {return veiculo;}
 
     //Setters
     public void setStatus(String status) {this.status = status;}
     public void setMotivo(String motivo) {this.motivo = motivo;}
     public void setDataEmissao(Date dataEmissao) {this.dataEmissao = dataEmissao;}
-
-    public void setProprietario(Proprietario proprietario) {this.proprietario = proprietario;}
+    public void setVistoriador(Vistoriador vistoriador) {this.vistoriador = vistoriador;}
+    public void setAgendamento(Agendamento agendamento) {this.agendamento = agendamento;}
     public void setVeiculo(Veiculo veiculo) {this.veiculo = veiculo;}
 
     public void mostrarLaudo() {
         System.out.println("Status: " + this.status);
         System.out.println("Motivo: " + this.motivo);
         System.out.println("Data de emissão: " + this.dataEmissao);
-        System.out.println("Vistoriador: " + this.vistoriador);
+        System.out.println("Vistoriador: " + (this.vistoriador != null ? this.vistoriador.getNome() : "N/A"));
     }
 }
