@@ -1,37 +1,37 @@
 package view;
 
+import controller.AgendamentoController;
 import controller.LaudoController;
 import controller.SolicitacaoController;
+import model.Agendamento;
 import model.Proprietario;
-import model.SolicitacaoAgendamento;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
+import util.EstiloUtil;
+import util.FundoGradienteUtil;
 
 public class ProprietarioView extends JFrame {
-    private final SolicitacaoController controller;
-    private final Proprietario proprietario;
+    private AgendamentoController agendamentoController;
+    private LaudoController laudoController;
+    private Proprietario proprietario;
     private DefaultTableModel tabelaModel;
 
-    public ProprietarioView(SolicitacaoController controller) {
-        this.controller = controller;
-        this.proprietario = new Proprietario(
-                "João da Silva",
-                "12345678900",
-                LocalDate.of(1990, 5, 15),
-                "Rua das Flores, 123",
-                "joao@email.com",
-                "61999998888",
-                "DF12345678",
-                "senhaSegura"
-        );
+    public ProprietarioView(AgendamentoController agController, Proprietario proprietario) {
+        this.agendamentoController = agController;
+        this.laudoController = new LaudoController();
+        this.proprietario = proprietario;
 
         setTitle("Área do Proprietário - " + proprietario.getNome());
         setSize(800, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        // Configuração de estilo
+        setContentPane(new FundoGradienteUtil());
+        setLayout(new BorderLayout());
+        EstiloUtil.aplicarEstilo(this);
 
         initUI();
         atualizarLista();
@@ -39,10 +39,12 @@ public class ProprietarioView extends JFrame {
 
     private void initUI() {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setOpaque(false);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Cabeçalho
         JPanel headerPanel = new JPanel();
+        headerPanel.setOpaque(false);
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
 
         JLabel lblTitle = new JLabel("Bem-vindo, Proprietário!", JLabel.CENTER);
@@ -76,11 +78,12 @@ public class ProprietarioView extends JFrame {
 
         // Botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.setOpaque(false);
 
         JButton btnSolicitar = new JButton("Nova Solicitação");
         btnSolicitar.setPreferredSize(new Dimension(180, 40));
         btnSolicitar.addActionListener(e -> {
-            new SolicitacaoView(controller, proprietario).setVisible(true);
+            new SolicitacaoView(agendamentoController, proprietario).setVisible(true);
             atualizarLista();
         });
 
@@ -106,16 +109,16 @@ public class ProprietarioView extends JFrame {
     private void atualizarLista() {
         tabelaModel.setRowCount(0);
 
-        for (SolicitacaoAgendamento s : controller.listarSolicitacoes()) {
-            String motivo = "Negado".equals(s.getStatus()) ? s.getMotivoNegacao() : "-";
-            String placa = (s.getVeiculo() != null) ? s.getVeiculo().getPlaca() : "N/A";
-
-            tabelaModel.addRow(new Object[]{
-                    s.getLocal(),
-                    s.getStatus(),
-                    motivo,
-                    placa
-            });
+        for (Agendamento ag : agendamentoController.listarAgendamentos()) {
+            if (ag.getVeiculo().getProprietario().getCpf().equals(proprietario.getCpf())) {
+                tabelaModel.addRow(new Object[]{
+                        ag.getId(),
+                        ag.getData(),
+                        ag.getHorario(),
+                        ag.getStatus(),
+                        ag.getVeiculo().getPlaca()
+                });
+            }
         }
     }
 }

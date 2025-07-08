@@ -2,24 +2,34 @@ package controller;
 
 import model.Laudo;
 import model.Proprietario;
-import model.Veiculo;
-import model.Vistoriador;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class LaudoController {
-    public List<Laudo> listarPorProprietario(String cpf) {
+    private List<Laudo> laudos;
 
-        Proprietario p = new Proprietario("João da Silva", cpf, null, "", "", "", "", "");
-        Vistoriador v = new Vistoriador("Carlos Técnico", "99999999999", null, "", "", "", "mat123", "senha123");
-        Veiculo veiculo = new Veiculo("ABC-1234", "Fiat Uno", p, true);
+    public LaudoController() {
+        this.laudos = new ArrayList<>();
+    }
 
-        List<Laudo> laudos = new ArrayList<>();
-        laudos.add(new Laudo("Aprovado", "Revisão periódica", new Date(), v, p, veiculo));
-        laudos.add(new Laudo("Reprovado", "Documento vencido", new Date(), v, p, veiculo));
+    // Mantido igual ao anterior
+    public List<Laudo> listarPorProprietario(String cpfProprietario) {
+        List<Laudo> result = new ArrayList<>();
+        for (Laudo laudo : laudos) {
+            if (laudo.getVeiculo().getProprietario().getCpf().equals(cpfProprietario)) {
+                result.add(laudo);
+            }
+        }
+        return result;
+    }
 
-        return laudos;
+    // Novo método para integração com agendamentos
+    public boolean emitirLaudo(Laudo laudo) {
+        try {
+            laudos.add(laudo);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

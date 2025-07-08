@@ -1,23 +1,33 @@
 package view;
 
-import java.time.LocalDate;
+import controller.UsuarioController;
+import controller.PessoaController;
 import model.Vistoriador;
+import util.EstiloUtil;
+import util.FundoGradienteUtil;
+
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 
 public class VistoriadorView extends JFrame {
     public VistoriadorView(String user) {
-        setTitle("Área do Vistoriador - " + user);
+        UsuarioController uc = new UsuarioController();
+        String nome = uc.retornaNome(user);
+        setTitle("Área do Vistoriador - " + nome);
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        Vistoriador vistoriador = new Vistoriador(user, "09276627103", LocalDate.of(2006, 6, 9),
-                "Vicente Pires", "juliaamorimp@gmail.com", "996601744", "1234", "abc");
+        //Configuração das cores e estilo
+        setContentPane(new FundoGradienteUtil());
+        setLayout(new BorderLayout());
+        EstiloUtil.aplicarEstilo(this);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setOpaque(false);
 
-        JLabel lblBemVindo = new JLabel("Bem-vinda, Vistoriadora " + user, JLabel.CENTER);
+        JLabel lblBemVindo = new JLabel("Bem-vinda, Vistoriadora " + nome, JLabel.CENTER);
         lblBemVindo.setFont(new Font("Comic Sans", Font.BOLD, 18));
         mainPanel.add(lblBemVindo, BorderLayout.CENTER);
 
@@ -25,7 +35,12 @@ public class VistoriadorView extends JFrame {
 
         JButton btnAgendamentos = new JButton("Meus Agendamentos");
         btnAgendamentos.addActionListener(e -> {
-            new VistoriadorAgendamentosView(vistoriador).setVisible(true);
+            try {
+                Vistoriador vistoriador = PessoaController.buscarVistoriadorPorCpf(user);
+                new VistoriadorAgendamentosView(vistoriador).setVisible(true);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         buttonPanel.add(btnAgendamentos);

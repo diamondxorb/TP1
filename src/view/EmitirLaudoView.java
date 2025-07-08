@@ -4,9 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Date;
+
 import model.Agendamento;
 import model.Laudo;
 import model.Vistoriador;
+import util.EstiloUtil;
+import util.FundoGradienteUtil;
 
 public class EmitirLaudoView extends JFrame {
     private final Agendamento agendamento;
@@ -22,11 +25,17 @@ public class EmitirLaudoView extends JFrame {
         setSize(500, 400);
         setLocationRelativeTo(null);
 
+        //Configuração das cores e estilo
+        setContentPane(new FundoGradienteUtil());
+        setLayout(new BorderLayout());
+        EstiloUtil.aplicarEstilo(this);
+
         initComponents();
     }
 
     private void initComponents() {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setOpaque(false);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JPanel formPanel = new JPanel(new GridBagLayout());
@@ -66,7 +75,7 @@ public class EmitirLaudoView extends JFrame {
         formPanel.add(scrollMotivo, gbc);
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
-        
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnEmitir = new JButton("Emitir Laudo");
         btnEmitir.addActionListener(this::emitirLaudo);
@@ -79,10 +88,7 @@ public class EmitirLaudoView extends JFrame {
 
     private void emitirLaudo(ActionEvent e) {
         if (!rbAprovado.isSelected() && !rbNegado.isSelected()) {
-            JOptionPane.showMessageDialog(this,
-                    "Selecione um status para o laudo!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Selecione um status para o laudo!","Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -90,22 +96,16 @@ public class EmitirLaudoView extends JFrame {
         String motivo = taMotivo.getText();
 
         if (status.equals("Negado") && motivo.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Para laudos negados, é obrigatório informar o motivo!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Para laudos negados, é obrigatório informar o motivo!","Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // Associa o laudo ao agendamento
-        Laudo laudo = new Laudo(status, motivo, new Date(), vistoriador, null, null);
+        Laudo laudo = new Laudo(status, motivo, new Date(), vistoriador);
         agendamento.setLaudo(laudo);
         agendamento.setStatus("Concluído");
 
-        JOptionPane.showMessageDialog(this,
-                "Laudo emitido com sucesso!",
-                "Sucesso",
-                JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this,"Laudo emitido com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
         dispose();
     }

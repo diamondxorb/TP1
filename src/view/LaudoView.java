@@ -6,6 +6,8 @@ import model.Proprietario;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import util.EstiloUtil;
+import util.FundoGradienteUtil;
 
 public class LaudoView extends JFrame {
     public LaudoView(LaudoController controller, Proprietario proprietario) {
@@ -14,15 +16,22 @@ public class LaudoView extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Configuração de estilo
+        setContentPane(new FundoGradienteUtil());
+        setLayout(new BorderLayout());
+        EstiloUtil.aplicarEstilo(this);
+
         initUI(controller, proprietario);
     }
 
     private void initUI(LaudoController controller, Proprietario proprietario) {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setOpaque(false);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Cabeçalho
         JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setOpaque(false);
         JLabel lblTitle = new JLabel("Laudos do Veículo", JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
@@ -34,7 +43,13 @@ public class LaudoView extends JFrame {
 
         // Tabela de laudos
         String[] columns = {"Data", "Placa", "Modelo", "Status", "Vistoriador"};
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
+        DefaultTableModel model = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         JTable table = new JTable(model);
         table.setRowHeight(25);
         table.setBackground(Color.WHITE);
@@ -43,10 +58,10 @@ public class LaudoView extends JFrame {
         controller.listarPorProprietario(proprietario.getCpf()).forEach(laudo -> {
             Object[] row = {
                     laudo.getDataEmissaoFormatada(),
-                    laudo.getVeiculo().getPlaca(),
-                    laudo.getVeiculo().getModelo(),
+                    laudo.getVeiculo() != null ? laudo.getVeiculo().getPlaca() : "N/A",
+                    laudo.getVeiculo() != null ? laudo.getVeiculo().getModelo() : "N/A",
                     laudo.getStatus(),
-                    laudo.getVistoriador().getNome()
+                    laudo.getVistoriador() != null ? laudo.getVistoriador().getNome() : "N/A"
             };
             model.addRow(row);
         });
@@ -57,6 +72,7 @@ public class LaudoView extends JFrame {
 
         // Painel de detalhes
         JPanel detailPanel = new JPanel(new BorderLayout());
+        detailPanel.setOpaque(false);
         detailPanel.setBorder(BorderFactory.createTitledBorder("Detalhes do Laudo"));
         JTextArea taDetails = new JTextArea(8, 60);
         taDetails.setEditable(false);
@@ -85,15 +101,13 @@ public class LaudoView extends JFrame {
                         "VEÍCULO: %s (%s)\n" +
                         "STATUS: %s\n" +
                         "VISTORIADOR: %s\n" +
-                        "MOTIVO: %s\n" +
-                        "DOCUMENTAÇÃO: %s",
+                        "MOTIVO: %s",
                 laudo.getDataEmissaoFormatada(),
-                laudo.getVeiculo().getModelo(),
-                laudo.getVeiculo().getPlaca(),
+                laudo.getAgendamento().getVeiculo().getModelo(),
+                laudo.getAgendamento().getVeiculo().getPlaca(),
                 laudo.getStatus(),
                 laudo.getVistoriador().getNome(),
-                laudo.getMotivo(),
-                laudo.getVeiculo().isDocumentoPago() ? "Regular" : "Pendente"
+                laudo.getMotivo()
         );
     }
 }

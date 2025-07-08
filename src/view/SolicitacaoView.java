@@ -1,18 +1,23 @@
 package view;
 
-import controller.SolicitacaoController;
+import controller.AgendamentoController;
+import model.Agendamento;
 import model.Proprietario;
-import model.SolicitacaoAgendamento;
 import model.Veiculo;
-
 import javax.swing.*;
 import java.awt.*;
+import util.EstiloUtil;
+import util.FundoGradienteUtil;
 
 public class SolicitacaoView extends JFrame {
-    private SolicitacaoController controller;
+    private JTextField txtData = new JTextField();
+    private JTextField txtHorario = new JTextField();
+    private JTextArea txtMotivo = new JTextArea(3, 20);
+    private JCheckBox chkDocumento = new JCheckBox("Documentação em dia");
+    private AgendamentoController controller;
     private Proprietario proprietario;
 
-    public SolicitacaoView(SolicitacaoController controller, Proprietario proprietario) {
+    public SolicitacaoView(AgendamentoController controller, Proprietario proprietario) {
         this.controller = controller;
         this.proprietario = proprietario;
 
@@ -21,11 +26,17 @@ public class SolicitacaoView extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        // Configuração de estilo
+        setContentPane(new FundoGradienteUtil());
+        setLayout(new BorderLayout());
+        EstiloUtil.aplicarEstilo(this);
+
         initUI();
     }
 
     private void initUI() {
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+        panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         JTextField txtPlaca = new JTextField();
@@ -38,7 +49,6 @@ public class SolicitacaoView extends JFrame {
         cmbMotivo.addItem("Segunda via do CRV");
         cmbMotivo.addItem("Baixa de veículo");
         cmbMotivo.addItem("Outros");
-
 
         JCheckBox chkDocumento = new JCheckBox(" Documentação em dia");
         JTextField txtLocal = new JTextField();
@@ -63,9 +73,9 @@ public class SolicitacaoView extends JFrame {
             Veiculo veiculo = new Veiculo(
                     txtPlaca.getText(),
                     txtModelo.getText(),
-                    proprietario,
-                    chkDocumento.isSelected()
+                    proprietario
             );
+            veiculo.setDocumentoPago(chkDocumento.isSelected());
 
             String motivo = cmbMotivo.getSelectedItem().toString();
             String observacoes = txtObservacoes.getText().trim();
@@ -74,15 +84,18 @@ public class SolicitacaoView extends JFrame {
                 motivo += " - " + observacoes;
             }
 
-            SolicitacaoAgendamento solicitacao = new SolicitacaoAgendamento(
-                    txtLocal.getText(),
-                    veiculo,
-                    motivo
-            );
+            String data = txtData.getText();
+            String horario = txtHorario.getText();
+            String motivoAgendamento = txtMotivo.getText();
+            String placa = txtPlaca.getText();
+            String modelo = txtModelo.getText();
 
-            controller.solicitarAgendamento(solicitacao);
-            JOptionPane.showMessageDialog(this, "Solicitação enviada com sucesso!");
-            this.dispose(); // Fecha essa janela após enviar
+            if (AgendamentoController.criarAgendamento(data, horario, motivoAgendamento, placa, modelo, proprietario)) {
+                JOptionPane.showMessageDialog(this, "Solicitação enviada com sucesso!");
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao enviar solicitação!", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         panel.add(new JLabel(""));
